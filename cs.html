@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Coming Soon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Press Start 2P', monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .back {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 12px;
+      text-decoration: none;
+      border: 2px solid white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-transform: uppercase;
+    }
+
+    .coming-soon {
+      font-size: 24px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .letter {
+      animation: float 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-5px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- كلمة BACK بلون عشوائي -->
+  <a href="index.html" class="back" id="backBtn">BACK</a>
+
+  <!-- COMING SOON كل حرف بلون مختلف -->
+  <div class="coming-soon" id="comingSoonText"></div>
+
+  <script>
+    const colors = ["#ff0000", "#00ff00", "#0000ff", "#ff9900", "#cc00ff", "#00ffff", "#ffff00"]; // ألوان القلوب السبعة
+
+    // توليد كلمة COMING SOON بلون لكل حرف
+    const text = "COMING SOON";
+    const container = document.getElementById("comingSoonText");
+
+    [...text].forEach((letter, i) => {
+      const span = document.createElement("span");
+      span.textContent = letter;
+      span.className = "letter";
+      span.style.color = colors[i % colors.length];
+      span.style.animationDelay = `${i * 0.1}s`;
+      container.appendChild(span);
+    });
+
+    // تغيير لون زر BACK عشوائيًا
+    const backBtn = document.getElementById("backBtn");
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    backBtn.style.color = "black";
+    backBtn.style.backgroundColor = randomColor;
+  </script>
+
+</body>
+</html>
