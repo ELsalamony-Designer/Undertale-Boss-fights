@@ -27,7 +27,7 @@
 
     p.subtitle {
       font-size: 12px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
       color: #aaa;
     }
 
@@ -48,6 +48,7 @@
       font-size: 10px;
       border: 2px solid white;
       box-shadow: 2px 2px 0 white;
+      transition: transform 0.2s ease;
     }
 
     .red { background-color: #ff0000; }
@@ -59,23 +60,46 @@
     .yellow { background-color: #ffff00; }
 
     .download-btn:hover {
+      animation: shake 0.3s;
       transform: scale(1.05);
+    }
+
+    @keyframes shake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      20% { transform: translate(-1px, -2px) rotate(-1deg); }
+      40% { transform: translate(-3px, 0px) rotate(1deg); }
+      60% { transform: translate(3px, 2px) rotate(0deg); }
+      80% { transform: translate(1px, -1px) rotate(1deg); }
+      100% { transform: translate(-1px, 2px) rotate(-1deg); }
+    }
+
+    @media (max-width: 600px) {
+      .download-btn {
+        width: 80%;
+        font-size: 12px;
+      }
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 10px;
+      margin-bottom: 30px;
+      width: 60%;
+      max-width: 300px;
     }
   </style>
 </head>
 <body>
 
-  <!-- 🔼 اللوجو -->
   <img class="logo" src="https://i.postimg.cc/xCZjvKWw/undertale-toriel-sans-asgore-dreemurr-wallpaper.jpg" alt="Undertale Logo">
 
-  <!-- 📝 عنوان -->
   <h1>SAVE FILES FOR BOSS FIGHTS</h1>
   <p class="subtitle">Choose your fight and download the save file instantly</p>
-  <p class="subtitle">How it works: 1-Download the file
-  2- Extract the file
-  3-Take the file data and replace undertale's one with it</p>
+  <p class="subtitle">How it works: 1-Download the file<br>2-Extract the file<br>3-Take the file data and replace undertale's one with it</p>
 
-  <!-- ⬇️ الأزرار -->
+  <!-- 🔍 شريط بحث -->
+  <input type="text" id="search" placeholder="Search fights...">
+
   <div class="buttons">
     <a href="https://www.mediafire.com/file/2lw37uwv0xrdlun/Data_of_Sans%2527s_fight.rar/file" class="download-btn red" target="_blank" download>SANS FIGHT</a>
     <a href="cs.html" class="download-btn orange">TORIEL FIGHT</a>
@@ -85,14 +109,18 @@
     <a href="cs.html" class="download-btn purple">MUFFET FIGHT</a>
     <a href="cs.html" class="download-btn cyan">ASGORE FIGHT</a>
   </div>
+
   <h1>Updates: Sans is available now</h1>
-  <h1>Coming Soon: More fights , Comments , Special fights</h1>
+  <h1 id="countdown">Coming Soon: More fights, Comments, Special fights</h1>
+
+  <!-- 🔊 صوت الضغط -->
+  <audio id="click-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c0880dd3a1.mp3?filename=menu-click-110818.mp3"></audio>
 
   <!-- 🎵 مشغل الصوت -->
   <audio id="bgm" autoplay loop></audio>
 
   <script>
-    // قائمة الأغاني
+    // 🎵 تشغيل أغنية عشوائية
     const songs = [
       "https://soundcloud.com/angrysausage/toby-fox-undertale-69?si=aaa440b5a1604c17976cb00a228438a0&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       "https://soundcloud.com/gallitos-figter/sans-an-enigmatic-encounter-phase-3?si=925b61d3e5414461b0dd0263ee35ff54&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
@@ -100,15 +128,39 @@
       "https://soundcloud.com/angrysausage/toby-fox-undertale-41?in=user-828307492/sets/undertale&si=562c4eeb09b84ca6bb126eee8d123921&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       "https://soundcloud.com/user-828307492/sets/undertale?si=a90d2f58c9294728b7715ee3760175bb&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
     ];
-
-    // اختيار عشوائي
     const randomSong = songs[Math.floor(Math.random() * songs.length)];
-
-    // تشغيل الأغنية
     const audioPlayer = document.getElementById("bgm");
     audioPlayer.src = randomSong;
-    audioPlayer.volume = 0.4; // اختياري: تتحكم في الصوت
-  </script>
+    audioPlayer.volume = 0.4;
 
+    // 🔊 صوت الضغط
+    const clickSound = document.getElementById("click-sound");
+    document.querySelectorAll('.download-btn').forEach(btn => {
+      btn.addEventListener('click', () => clickSound.play());
+    });
+
+    // 🔍 بحث
+    document.getElementById("search").addEventListener("input", function () {
+      const term = this.value.toLowerCase();
+      document.querySelectorAll(".download-btn").forEach(btn => {
+        btn.style.display = btn.textContent.toLowerCase().includes(term) ? "inline-block" : "none";
+      });
+    });
+
+    // ⏳ عداد تنازلي
+    const countdownElement = document.getElementById("countdown");
+    const targetDate = new Date("2025-07-25T00:00:00").getTime();
+    setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+      if (distance < 0) {
+        countdownElement.innerText = "New fights released!";
+        return;
+      }
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      countdownElement.innerText = `New fights in: ${days}d ${hours}h`;
+    }, 1000);
+  </script>
 </body>
 </html>
