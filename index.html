@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Undertale Fight Files</title>
+  <title>SAVEPOINT.EXE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
@@ -48,7 +48,6 @@
       font-size: 10px;
       border: 2px solid white;
       box-shadow: 2px 2px 0 white;
-      transition: transform 0.2s ease;
     }
 
     .red { background-color: #ff0000; }
@@ -60,8 +59,7 @@
     .yellow { background-color: #ffff00; }
 
     .download-btn:hover {
-      animation: shake 0.3s;
-      transform: scale(1.05);
+      animation: shake 0.5s infinite;
     }
 
     @keyframes shake {
@@ -86,6 +84,18 @@
       margin-bottom: 30px;
       width: 60%;
       max-width: 300px;
+      border: 2px solid white;
+      background-color: black;
+      color: white;
+      font-family: 'Press Start 2P', monospace;
+      text-align: center;
+      box-shadow: 2px 2px 0 white;
+    }
+
+    #countdown {
+      font-size: 12px;
+      margin-top: 20px;
+      color: #888;
     }
   </style>
 </head>
@@ -93,12 +103,12 @@
 
   <img class="logo" src="https://i.postimg.cc/xCZjvKWw/undertale-toriel-sans-asgore-dreemurr-wallpaper.jpg" alt="Undertale Logo">
 
-  <h1>SAVE FILES FOR BOSS FIGHTS</h1>
+  <h1>SAVEPOINT.EXE</h1>
   <p class="subtitle">Choose your fight and download the save file instantly</p>
-  <p class="subtitle">How it works: 1-Download the file<br>2-Extract the file<br>3-Take the file data and replace undertale's one with it</p>
+  <p class="subtitle">How it works: 1-Download the file<br>2-Extract the file<br>3-Replace Undertale's save with it</p>
 
   <!-- 🔍 شريط بحث -->
-  <input type="text" id="search" placeholder="Search fights...">
+  <input type="text" id="search" placeholder="Search Fights...">
 
   <div class="buttons">
     <a href="https://www.mediafire.com/file/2lw37uwv0xrdlun/Data_of_Sans%2527s_fight.rar/file" class="download-btn red" target="_blank" download>SANS FIGHT</a>
@@ -111,7 +121,8 @@
   </div>
 
   <h1>Updates: Sans is available now</h1>
-  <h1 id="countdown">Coming Soon: More fights, Comments, Special fights</h1>
+  <h1>Coming Soon: More fights, Comments, Special fights</h1>
+  <h2 id="countdown"></h2>
 
   <!-- 🔊 صوت الضغط -->
   <audio id="click-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c0880dd3a1.mp3?filename=menu-click-110818.mp3"></audio>
@@ -120,7 +131,7 @@
   <audio id="bgm" autoplay loop></audio>
 
   <script>
-    // 🎵 تشغيل أغنية عشوائية
+    // 🎵 أغنية عشوائية
     const songs = [
       "https://soundcloud.com/angrysausage/toby-fox-undertale-69?si=aaa440b5a1604c17976cb00a228438a0&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       "https://soundcloud.com/gallitos-figter/sans-an-enigmatic-encounter-phase-3?si=925b61d3e5414461b0dd0263ee35ff54&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
@@ -147,20 +158,24 @@
       });
     });
 
-    // ⏳ عداد تنازلي
+    // ⏳ عداد تنازلي من الفيمتوثانية للسنة
     const countdownElement = document.getElementById("countdown");
-    const targetDate = new Date("2025-07-25T00:00:00").getTime();
+    const targetDate = new Date("2026-01-01T00:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
       const distance = targetDate - now;
-      if (distance < 0) {
+      if (distance <= 0) {
         countdownElement.innerText = "New fights released!";
         return;
       }
+
+      const femtoseconds = distance * 1_000_000_000_000_000; // فيمتو ثانية = 10^(-15)
+
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      countdownElement.innerText = `New fights in: ${days}d ${hours}h`;
-    }, 1000);
+      countdownElement.innerHTML =
+        `Time left: <br>${femtoseconds.toLocaleString()} fs<br>${days} days ${hours} hours`;
+    }, 100);
   </script>
 </body>
 </html>
