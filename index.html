@@ -66,11 +66,14 @@
 <body>
 
   <!-- 🔼 اللوجو -->
-  <img class="logo" src="https://i.postimg.cc/8CGpJZTz/Undertale-Logo-500x281.jpg" alt="Undertale Logo">
+  <img class="logo" src="https://i.postimg.cc/xCZjvKWw/undertale-toriel-sans-asgore-dreemurr-wallpaper.jpg" alt="Undertale Logo">
 
   <!-- 📝 عنوان -->
   <h1>SAVE FILES FOR BOSS FIGHTS</h1>
   <p class="subtitle">Choose your fight and download the save file instantly</p>
+  <p class="subtitle">How it works: 1-Download the file
+  2- Extract the file
+  3-Take the file data and replace undertale's one with it</p>
 
   <!-- ⬇️ الأزرار -->
   <div class="buttons">
@@ -82,6 +85,30 @@
     <a href="cs.html" class="download-btn purple">MUFFET FIGHT</a>
     <a href="cs.html" class="download-btn cyan">ASGORE FIGHT</a>
   </div>
+  <h1>Updates: Sans is available now</h1>
+  <h1>Coming Soon: More fights , Comments , Special fights</h1>
+
+  <!-- 🎵 مشغل الصوت -->
+  <audio id="bgm" autoplay loop></audio>
+
+  <script>
+    // قائمة الأغاني
+    const songs = [
+      "https://soundcloud.com/angrysausage/toby-fox-undertale-69?si=aaa440b5a1604c17976cb00a228438a0&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+      "https://soundcloud.com/gallitos-figter/sans-an-enigmatic-encounter-phase-3?si=925b61d3e5414461b0dd0263ee35ff54&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+      "https://soundcloud.com/utlc/the-slaughter-continues?si=2def4a413779421b8410839c23dd5e2d&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+      "https://soundcloud.com/angrysausage/toby-fox-undertale-41?in=user-828307492/sets/undertale&si=562c4eeb09b84ca6bb126eee8d123921&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+      "https://soundcloud.com/user-828307492/sets/undertale?si=a90d2f58c9294728b7715ee3760175bb&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
+    ];
+
+    // اختيار عشوائي
+    const randomSong = songs[Math.floor(Math.random() * songs.length)];
+
+    // تشغيل الأغنية
+    const audioPlayer = document.getElementById("bgm");
+    audioPlayer.src = randomSong;
+    audioPlayer.volume = 0.4; // اختياري: تتحكم في الصوت
+  </script>
 
 </body>
 </html>
