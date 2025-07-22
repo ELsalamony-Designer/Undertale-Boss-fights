@@ -159,23 +159,21 @@
     });
 
     // ⏳ عداد تنازلي من الفيمتوثانية للسنة
-    const countdownElement = document.getElementById("countdown");
-    const targetDate = new Date("2026-01-01T00:00:00").getTime();
-    setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-      if (distance <= 0) {
-        countdownElement.innerText = "New fights released!";
-        return;
-      }
-
-      const femtoseconds = distance * 1_000_000_000_000_000; // فيمتو ثانية = 10^(-15)
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      countdownElement.innerHTML =
-        `Time left: <br>${femtoseconds.toLocaleString()} fs<br>${days} days ${hours} hours`;
-    }, 100);
+    // ⏳ عداد تنازلي بسيط
+const countdownElement = document.getElementById("countdown");
+const targetDate = new Date("2025-07-25T00:00:00").getTime();
+setInterval(() => {
+  const now = new Date().getTime();
+  const distance = targetDate - now;
+  if (distance < 0) {
+    countdownElement.innerText = "New fights released!";
+    return;
+  }
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  countdownElement.innerText = `New fights in: ${days}d ${hours}h`;
+}, 1000);
+;
   </script>
 </body>
 </html>
