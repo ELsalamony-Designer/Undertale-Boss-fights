@@ -18,7 +18,6 @@
     }
 
     #dynamic-bg {
-      content: "";
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
@@ -26,6 +25,14 @@
       background-repeat: repeat;
       opacity: 0.08;
       z-index: -1;
+      animation: slideBg 60s infinite alternate linear;
+      transition: opacity 2s ease;
+    }
+
+    @keyframes slideBg {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 50% 0%; }
+      100% { background-position: 0% 0%; }
     }
 
     @keyframes fadein {
@@ -131,26 +138,11 @@
       margin-top: 20px;
       color: #888;
     }
-
-    .back-btn {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      color: white;
-      background-color: #222;
-      padding: 10px;
-      border: 2px solid white;
-      text-decoration: none;
-      font-size: 10px;
-      font-family: 'Press Start 2P', monospace;
-    }
   </style>
 </head>
 <body>
 
   <div id="dynamic-bg"></div>
-
-  <a href="index.html" class="back-btn">⬅ BACK</a>
 
   <img class="logo" src="https://i.postimg.cc/xCZjvKWw/undertale-toriel-sans-asgore-dreemurr-wallpaper.jpg" alt="Undertale Logo">
 
@@ -178,13 +170,13 @@
   <audio id="bgm" autoplay loop></audio>
 
   <script>
-    // 🎵 موسيقى عشوائية
+    // موسيقى عشوائية
     const songs = [
-      "https://soundcloud.com/angrysausage/toby-fox-undertale-69?si=aaa440b5a1604c17976cb00a228438a0&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
-      "https://soundcloud.com/gallitos-figter/sans-an-enigmatic-encounter-phase-3?si=925b61d3e5414461b0dd0263ee35ff54&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
-      "https://soundcloud.com/utlc/the-slaughter-continues?si=2def4a413779421b8410839c23dd5e2d&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
-      "https://soundcloud.com/angrysausage/toby-fox-undertale-41?in=user-828307492/sets/undertale&si=562c4eeb09b84ca6bb126eee8d123921&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
-      "https://soundcloud.com/user-828307492/sets/undertale?si=a90d2f58c9294728b7715ee3760175bb&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
+      "https://soundcloud.com/angrysausage/toby-fox-undertale-69",
+      "https://soundcloud.com/gallitos-figter/sans-an-enigmatic-encounter-phase-3",
+      "https://soundcloud.com/utlc/the-slaughter-continues",
+      "https://soundcloud.com/angrysausage/toby-fox-undertale-41",
+      "https://soundcloud.com/user-828307492/sets/undertale"
     ];
     const randomSong = songs[Math.floor(Math.random() * songs.length)];
     const audioPlayer = document.getElementById("bgm");
@@ -220,15 +212,34 @@
       countdownElement.innerText = `New fights in: ${days}d ${hours}h`;
     }, 1000);
 
-    // خلفيات عشوائية
+    // خلفيات عشوائية بتأثير تدريجي كل دقيقة ونص
     const bgImages = [
       "https://i.postimg.cc/65Tk9R6b/R.jpg",
       "https://tse3.mm.bing.net/th/id/OIP.tYYRCZHNSNNMdvqjN7F9LwHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
       "https://i.redd.it/ax0tph8vnlv61.jpg",
-      "https://orig00.deviantart.net/a7da/f/2016/017/b/b/untitled_drawing_by_neonbluefaith-d9oanlo.png",
+      "https://orig00.deviantart.net/a7da/f/2016/017/b/b/untitled_drawing_by_neonbluefaith-d9oanlo.png"
     ];
-    const randomBg = bgImages[Math.floor(Math.random() * bgImages.length)];
-    document.getElementById("dynamic-bg").style.backgroundImage = `url('${randomBg}')`;
+
+    let currentBgIndex = 0;
+    const bgDiv = document.getElementById("dynamic-bg");
+
+    function changeBackground() {
+      bgDiv.style.transition = "opacity 10s ease";
+      bgDiv.style.opacity = 0;
+
+      setTimeout(() => {
+        currentBgIndex = (currentBgIndex + 1) % bgImages.length;
+        bgDiv.style.backgroundImage = `url('${bgImages[currentBgIndex]}')`;
+        bgDiv.style.transition = "opacity 10s ease";
+        bgDiv.style.opacity = 0.08;
+      }, 10000); // بعد 10 ثواني يبدأ يفتح
+    }
+
+    // أول صورة
+    bgDiv.style.backgroundImage = `url('${bgImages[currentBgIndex]}')`;
+
+    // تغيير الخلفية كل 90 ثانية
+    setInterval(changeBackground, 90000);
   </script>
 </body>
 </html>
