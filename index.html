@@ -33,6 +33,64 @@
       to {opacity: 1;}
     }
 
+    #version {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-size: 10px;
+      color: #ffcc00;
+      background-color: #111;
+      padding: 5px 10px;
+      border: 2px solid #ffcc00;
+      border-radius: 6px;
+      box-shadow: 2px 2px 0 #ffcc00;
+      z-index: 10;
+      opacity: 0.85;
+    }
+
+    #mobile-warning {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.95);
+      color: white;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      z-index: 999;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    #mobile-warning button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 10px;
+      font-family: 'Press Start 2P', monospace;
+      background-color: #ff0000;
+      color: white;
+      border: 2px solid white;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 2px 2px 0 white;
+    }
+
+    #mobile-warning button:hover {
+      background-color: #cc0000;
+    }
+
+    @media only screen and (max-width: 768px) {
+      #mobile-warning {
+        display: flex;
+      }
+      body {
+        overflow: hidden;
+      }
+    }
+
     img.logo {
       width: 300px;
       margin-bottom: 30px;
@@ -135,6 +193,13 @@
 </head>
 <body>
 
+  <div id="version">Version: 0003</div>
+
+  <div id="mobile-warning">
+    <p>This website is designed for Windows & MacBook</p>
+    <button onclick="document.getElementById('mobile-warning').style.display='none';document.body.style.overflow='auto';">Enter Anyway</button>
+  </div>
+
   <div id="dynamic-bg"></div>
 
   <img class="logo" src="https://i.postimg.cc/xCZjvKWw/undertale-toriel-sans-asgore-dreemurr-wallpaper.jpg" alt="Undertale Logo">
@@ -163,7 +228,7 @@
   <audio id="bgm" autoplay loop></audio>
 
   <script>
-    // موسيقى عشوائية
+    // Random music
     const songs = [
       "https://soundcloud.com/angrysausage/toby-fox-undertale-69",
       "https://soundcloud.com/gallitos-figter/sans-an-enigmatic-encounter-phase-3",
@@ -176,13 +241,13 @@
     audioPlayer.src = randomSong;
     audioPlayer.volume = 0.4;
 
-    // صوت الضغط
+    // Click sound
     const clickSound = document.getElementById("click-sound");
     document.querySelectorAll('.download-btn').forEach(btn => {
       btn.addEventListener('click', () => clickSound.play());
     });
 
-    // شريط البحث
+    // Search filter
     document.getElementById("search").addEventListener("input", function () {
       const term = this.value.toLowerCase();
       document.querySelectorAll(".download-btn").forEach(btn => {
@@ -190,7 +255,7 @@
       });
     });
 
-    // عداد تنازلي
+    // Countdown
     const countdownElement = document.getElementById("countdown");
     const targetDate = new Date("2025-07-25T00:00:00").getTime();
     setInterval(() => {
@@ -205,32 +270,27 @@
       countdownElement.innerText = `New fights in: ${days}d ${hours}h`;
     }, 1000);
 
-    // خلفيات عشوائية مع انتقال تدريجي (30s ظهور + 10s اختفاء + 10s ظهور = 50s لكل خلفية)
+    // Background rotation
     const bgImages = [
       "https://i.postimg.cc/65Tk9R6b/R.jpg",
       "https://tse3.mm.bing.net/th/id/OIP.tYYRCZHNSNNMdvqjN7F9LwHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
       "https://i.redd.it/ax0tph8vnlv61.jpg",
       "https://orig00.deviantart.net/a7da/f/2016/017/b/b/untitled_drawing_by_neonbluefaith-d9oanlo.png"
     ];
-
     let currentBgIndex = Math.floor(Math.random() * bgImages.length);
     const bgDiv = document.getElementById("dynamic-bg");
 
     function changeBackground() {
-      // إطفاء
       bgDiv.style.opacity = 0;
       setTimeout(() => {
         currentBgIndex = (currentBgIndex + 1) % bgImages.length;
         bgDiv.style.backgroundImage = `url('${bgImages[currentBgIndex]}')`;
         bgDiv.style.opacity = 0.08;
-      }, 10000); // بعد 10 ثواني من الإطفاء يتم التغيير ثم فتح تدريجي
+      }, 10000);
     }
 
-    // أول صورة بشكل عشوائي
     bgDiv.style.backgroundImage = `url('${bgImages[currentBgIndex]}')`;
     bgDiv.style.opacity = 0.08;
-
-    // تغيير الخلفية كل 50 ثانية (30 ظهور + 10 سواد + 10 فتح)
     setInterval(changeBackground, 50000);
   </script>
 </body>
