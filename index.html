@@ -23,16 +23,9 @@
       width: 100%; height: 100%;
       background-size: cover;
       background-repeat: repeat;
-      opacity: 0.08;
+      opacity: 0;
       z-index: -1;
-      animation: slideBg 60s infinite alternate linear;
-      transition: opacity 2s ease;
-    }
-
-    @keyframes slideBg {
-      0% { background-position: 0% 0%; }
-      50% { background-position: 50% 0%; }
-      100% { background-position: 0% 0%; }
+      transition: opacity 10s ease;
     }
 
     @keyframes fadein {
@@ -212,7 +205,7 @@
       countdownElement.innerText = `New fights in: ${days}d ${hours}h`;
     }, 1000);
 
-    // خلفيات عشوائية بتأثير تدريجي كل دقيقة ونص
+    // خلفيات عشوائية مع انتقال تدريجي (30s ظهور + 10s اختفاء + 10s ظهور = 50s لكل خلفية)
     const bgImages = [
       "https://i.postimg.cc/65Tk9R6b/R.jpg",
       "https://tse3.mm.bing.net/th/id/OIP.tYYRCZHNSNNMdvqjN7F9LwHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
@@ -220,26 +213,25 @@
       "https://orig00.deviantart.net/a7da/f/2016/017/b/b/untitled_drawing_by_neonbluefaith-d9oanlo.png"
     ];
 
-    let currentBgIndex = 0;
+    let currentBgIndex = Math.floor(Math.random() * bgImages.length);
     const bgDiv = document.getElementById("dynamic-bg");
 
     function changeBackground() {
-      bgDiv.style.transition = "opacity 10s ease";
+      // إطفاء
       bgDiv.style.opacity = 0;
-
       setTimeout(() => {
         currentBgIndex = (currentBgIndex + 1) % bgImages.length;
         bgDiv.style.backgroundImage = `url('${bgImages[currentBgIndex]}')`;
-        bgDiv.style.transition = "opacity 10s ease";
         bgDiv.style.opacity = 0.08;
-      }, 10000); // بعد 10 ثواني يبدأ يفتح
+      }, 10000); // بعد 10 ثواني من الإطفاء يتم التغيير ثم فتح تدريجي
     }
 
-    // أول صورة
+    // أول صورة بشكل عشوائي
     bgDiv.style.backgroundImage = `url('${bgImages[currentBgIndex]}')`;
+    bgDiv.style.opacity = 0.08;
 
-    // تغيير الخلفية كل 90 ثانية
-    setInterval(changeBackground, 90000);
+    // تغيير الخلفية كل 50 ثانية (30 ظهور + 10 سواد + 10 فتح)
+    setInterval(changeBackground, 50000);
   </script>
 </body>
 </html>
