@@ -17,6 +17,21 @@
       z-index: 0;
     }
 
+    #intro-screen {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: black;
+      color: white;
+      font-size: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      font-family: 'Press Start 2P', monospace;
+      transition: opacity 2s ease;
+    }
+
     #dynamic-bg {
       position: fixed;
       top: 0; left: 0;
@@ -134,6 +149,19 @@
       margin-right: 5px;
     }
 
+    .download-btn:hover::after {
+      content: " ⚔️";
+      position: absolute;
+      right: -20px;
+      animation: floatSword 1s infinite ease-in-out;
+    }
+
+    @keyframes floatSword {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+      100% { transform: translateY(0px); }
+    }
+
     .red { background-color: #ff0000; }
     .green { background-color: #00ff00; }
     .blue { background-color: #0000ff; }
@@ -189,10 +217,27 @@
       margin-top: 20px;
       color: #888;
     }
+
+    #music-toggle {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      z-index: 1000;
+      font-size: 12px;
+      padding: 10px;
+      border: 2px solid white;
+      background-color: black;
+      color: white;
+      font-family: 'Press Start 2P', monospace;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 2px 2px 0 white;
+    }
   </style>
 </head>
 <body>
 
+  <div id="intro-screen">LOADING...</div>
   <div id="version">Version: 0003</div>
 
   <div id="mobile-warning">
@@ -224,11 +269,20 @@
   <h1>Coming Soon: More fights, Comments, Special fights</h1>
   <h2 id="countdown"></h2>
 
+  <!-- زر الصوت -->
+  <button id="music-toggle">🔇</button>
+
+  <!-- تعليقات -->
+  <div style="margin-top: 80px;">
+    <h2>💬 Comments (Coming Soon)</h2>
+    <p style="color:gray; font-size: 12px;">You'll soon be able to leave your feedback here!</p>
+  </div>
+
   <audio id="click-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c0880dd3a1.mp3?filename=menu-click-110818.mp3"></audio>
   <audio id="bgm" autoplay loop></audio>
 
   <script>
-    // Random music
+    // موسيقى عشوائية
     const songs = [
       "https://soundcloud.com/angrysausage/toby-fox-undertale-69",
       "https://soundcloud.com/gallitos-figter/sans-an-enigmatic-encounter-phase-3",
@@ -241,21 +295,37 @@
     audioPlayer.src = randomSong;
     audioPlayer.volume = 0.4;
 
-    // Click sound
+    // زر تشغيل / إيقاف الموسيقى
+    const toggleBtn = document.getElementById('music-toggle');
+    toggleBtn.addEventListener('click', () => {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+        toggleBtn.innerText = "🔇";
+      } else {
+        audioPlayer.pause();
+        toggleBtn.innerText = "🔊";
+      }
+    });
+
+    // صوت الزر
     const clickSound = document.getElementById("click-sound");
     document.querySelectorAll('.download-btn').forEach(btn => {
       btn.addEventListener('click', () => clickSound.play());
     });
 
-    // Search filter
+    // البحث + كود سري
     document.getElementById("search").addEventListener("input", function () {
       const term = this.value.toLowerCase();
       document.querySelectorAll(".download-btn").forEach(btn => {
         btn.style.display = btn.textContent.toLowerCase().includes(term) ? "inline-block" : "none";
       });
+
+      if (this.value.trim().toUpperCase() === "GASTER") {
+        alert("👻 Secret Fight Unlocked! (Coming Soon)");
+      }
     });
 
-    // Countdown
+    // العد التنازلي
     const countdownElement = document.getElementById("countdown");
     const targetDate = new Date("2025-07-25T00:00:00").getTime();
     setInterval(() => {
@@ -270,7 +340,7 @@
       countdownElement.innerText = `New fights in: ${days}d ${hours}h`;
     }, 1000);
 
-    // Background rotation
+    // خلفيات متغيرة
     const bgImages = [
       "https://i.postimg.cc/65Tk9R6b/R.jpg",
       "https://tse3.mm.bing.net/th/id/OIP.tYYRCZHNSNNMdvqjN7F9LwHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
@@ -292,6 +362,15 @@
     bgDiv.style.backgroundImage = `url('${bgImages[currentBgIndex]}')`;
     bgDiv.style.opacity = 0.08;
     setInterval(changeBackground, 50000);
+
+    // شاشة التحميل
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const intro = document.getElementById('intro-screen');
+        intro.style.opacity = '0';
+        setTimeout(() => intro.style.display = 'none', 2000);
+      }, 2000);
+    });
   </script>
 </body>
 </html>
