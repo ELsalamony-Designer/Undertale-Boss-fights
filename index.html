@@ -5,6 +5,11 @@
   <title>UNDERPOINT - Save Files</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
   <style>
     body {
       background-color: black;
@@ -59,6 +64,22 @@
       border: 2px solid #ffcc00;
       border-radius: 6px;
       box-shadow: 2px 2px 0 #ffcc00;
+      z-index: 10;
+      opacity: 0.85;
+    }
+
+    /* CSS لعداد الزيارات */
+    #visit-counter {
+      position: fixed;
+      top: 10px;
+      right: 10px; /* لتظهر في الزاوية اليمنى العلوية */
+      font-size: 10px;
+      color: #00ffff; /* لون مميز للعداد */
+      background-color: #111;
+      padding: 5px 10px;
+      border: 2px solid #00ffff;
+      border-radius: 6px;
+      box-shadow: 2px 2px 0 #00ffff;
       z-index: 10;
       opacity: 0.85;
     }
@@ -239,6 +260,7 @@
 
   <div id="intro-screen">LOADING...</div>
   <div id="version">Version: 0003</div>
+  <div id="visit-counter">Visits: Calculating...</div>
 
   <div id="mobile-warning">
     <p>This website is designed for Windows & MacBook</p>
@@ -269,10 +291,8 @@
   <h1>Coming Soon: More fights, Comments, Special fights</h1>
   <h2 id="countdown"></h2>
 
-  <!-- زر الصوت -->
   <button id="music-toggle">🔇</button>
 
-  <!-- تعليقات -->
   <div style="margin-top: 80px;">
     <h2>💬 Comments (Coming Soon)</h2>
     <p style="color:gray; font-size: 12px;">You'll soon be able to leave your feedback here!</p>
@@ -282,6 +302,54 @@
   <audio id="bgm" autoplay loop></audio>
 
   <script>
+    // Firebase configuration (متاح بالفعل من الكود الخاص بك)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDdLJq7F6r6O9XZTQTIpwdrLR0ZySLGQrY",
+      authDomain: "shkl-1db60.firebaseapp.com",
+      databaseURL: "https://shkl-1db60-default-rtdb.firebaseio.com",
+      projectId: "shkl-1db60",
+      storageBucket: "shkl-1db60.firebasestorage.app",
+      messagingSenderId: "83946018492",
+      appId: "1:83946018492:web:3cfa51fa2ddebee27de2b9",
+      measurementId: "G-PW83MCMQYK"
+    };
+
+    // Initialize Firebase (باستخدام Firebase Compat Library)
+    const app = firebase.initializeApp(firebaseConfig);
+    const analytics = firebase.analytics();
+    const database = firebase.database();
+    const visitsRef = database.ref('visits/count'); // مرجع لعدد الزيارات في قاعدة البيانات
+
+    // دالة لتحديث وزيادة عدد الزيارات
+    function updateVisitCounter() {
+      visitsRef.transaction((currentCount) => {
+        // إذا كان currentCount null، فهذا يعني أن العقدة غير موجودة، نبدأ من 0.
+        let newCount = (currentCount || 0) + 1;
+        return newCount;
+      }, (error, committed, snapshot) => {
+        if (error) {
+          console.error("خطأ في تحديث عداد الزيارات:", error);
+          document.getElementById('visit-counter').innerText = `Visits: Error`;
+        } else if (!committed) {
+          console.log("تم إلغاء العملية (عميل آخر قام بتحديث القيمة أولاً).");
+          // في هذه الحالة، سيتولى مستمع 'onValue' تحديث العرض.
+        } else {
+          // إذا تمت العملية بنجاح، يتم تحديث العرض بالقيمة الجديدة.
+          document.getElementById('visit-counter').innerText = `Visits: ${snapshot.val()}`;
+        }
+      });
+    }
+
+    // مستمع لتحديثات عدد الزيارات في الوقت الفعلي
+    // هذا يضمن أن يتم تحديث العداد المعروض على الصفحة إذا زاره مستخدم آخر.
+    visitsRef.on('value', (snapshot) => {
+      if (snapshot.exists()) {
+        document.getElementById('visit-counter').innerText = `Visits: ${snapshot.val()}`;
+      } else {
+        document.getElementById('visit-counter').innerText = `Visits: 0`; // إذا لم يكن هناك عداد بعد
+      }
+    });
+
     // موسيقى عشوائية
     const songs = [
       "https://soundcloud.com/angrysausage/toby-fox-undertale-69",
@@ -363,13 +431,16 @@
     bgDiv.style.opacity = 0.08;
     setInterval(changeBackground, 50000);
 
-    // شاشة التحميل
+    // شاشة التحميل (تحديث: تم استدعاء دالة updateVisitCounter هنا)
     window.addEventListener('load', () => {
       setTimeout(() => {
         const intro = document.getElementById('intro-screen');
         intro.style.opacity = '0';
         setTimeout(() => intro.style.display = 'none', 2000);
       }, 2000);
+      
+      // بمجرد تحميل الصفحة، يتم تحديث عداد الزيارات
+      updateVisitCounter();
     });
   </script>
 </body>
